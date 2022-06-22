@@ -36,7 +36,10 @@ export default {
         formState.username === import.meta.env.VITE_USERNAME
         && formState.password === import.meta.env.VITE_PASSWORD
       ) {
+        // vuex: save data of student to vuex
         store.dispatch('Auth/login', profile);
+
+        // vue-router: redirect page to home after login
         router.push({ name: ROUTES.HOME });
       } else {
         notification['error']({
