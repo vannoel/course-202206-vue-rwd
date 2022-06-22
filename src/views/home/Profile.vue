@@ -6,84 +6,49 @@
     </a-breadcrumb>
 
     <a-card class="page_card">
-      <a-row :gutter="[12, 12]">
-        <a-col :span="6">
+      <div>
+        <div>
           <img :src="user.photo" />
-        </a-col>
-        <a-col :span="18">
-          <a-row>
-            <a-col :span="6">
-              <label>學號</label>
-              <p>{{ user.id }}</p>
-            </a-col>
-            <a-col :span="6">
-              <label>中文名稱</label>
-              <p>{{ user.name_zh }}</p>
-            </a-col>
-            <a-col :span="6">
-              <label>英文名稱</label>
-              <p>{{ user.name_en }}</p>
-            </a-col>
-            <a-col :span="6">
-              <label>身份別</label>
-              <p>{{ user.type }}</p>
-            </a-col>
-            <a-col :span="6">
-              <label>系所</label>
-              <p>{{ user.department }}</p>
-            </a-col>
-            <a-col :span="6">
-              <label>組別</label>
-              <p>{{ user.group }}</p>
-            </a-col>
-            <a-col :span="6">
-              <label>年級</label>
-              <p>{{ user.year }}</p>
-            </a-col>
-            <a-col :span="6">
-              <label>年級</label>
-              <p>{{ user.year }}</p>
-            </a-col>
-            <a-col :span="6">
-              <label>班級</label>
-              <p>{{ user.class }}</p>
-            </a-col>
-            <a-col :span="6">
-              <label>入學年</label>
-              <p>{{ user.enrollmentYear }}</p>
-            </a-col>
-            <a-col :span="6">
-              <label>聯絡電話</label>
-              <p>{{ user.phone }}</p>
-            </a-col>
-            <a-col :span="6">
-              <label>聯絡地址</label>
-              <p>{{ user.address }}</p>
-            </a-col>
-          </a-row>
-        </a-col>
-      </a-row>
+        </div>
+        <div>
+          <template v-for="key of dataKeys" :key="key.id">
+            <div>
+              <label>{{ key.label }}</label>
+              <tempalte v-if="key.id === 'phone'">
+                <input v-model="formPhone" />
+              </tempalte>
+              <tempalte v-else-if="key.id === 'address'">
+                <input v-model="formAddress" />
+              </tempalte>
+              <tempalte v-else>
+                <div>{{ user[key.id] }}</div>
+              </tempalte>
+            </div>
+          </template>
+          <button @click="handleUserInfo">更新</button>
+        </div>
+      </div>
     </a-card>
   </div>
 </template>
 
 <script>
-import { computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { notification } from 'ant-design-vue';
 
 const dataKeys = [
-  { id: 'name_zh', label: '中文姓名'},
-  { id: 'name_en', label: '英文姓名'},
-  { id: 'id', label: '學號'},
-  { id: 'type', label: '身份別'},
-  { id: 'year', label: '年級'},
-  { id: 'department', label: '系所'},
-  { id: 'group', label: '組別'},
-  { id: 'class', label: '班級'},
-  { id: 'enrollmentYear', label: '入學年'},
-  { id: 'phone', label: '聯絡電話'},
-  { id: 'address', label: '租屋地址'},
+  { id: 'name_zh', label: '中文姓名' },
+  { id: 'name_en', label: '英文姓名' },
+  { id: 'id', label: '學號' },
+  { id: 'type', label: '身份別' },
+  { id: 'year', label: '年級' },
+  { id: 'department', label: '系所' },
+  { id: 'group', label: '組別' },
+  { id: 'class', label: '班級' },
+  { id: 'enrollmentYear', label: '入學年' },
+  { id: 'phone', label: '聯絡電話' },
+  { id: 'address', label: '租屋地址' },
 ]
 
 export default {
@@ -93,11 +58,18 @@ export default {
 
     const user = computed(() => store.state.Auth.user);
 
+    const formPhone = ref(user.value.phone);
+    const formAddress = ref(user.value.address)
+
     onMounted(() => {
       store.commit('updateLoadingStatus', false);
     })
 
-    const updateProfile = () => {
+    const handleUserInfo = () => {
+      store.dispatch('Auth/updateProfile', {
+        phone: formPhone.value,
+        address: formAddress.value
+      });
       notification['success']({
         message: '更新成功',
       });
@@ -105,9 +77,11 @@ export default {
 
     return {
       user,
+      formPhone,
+      formAddress,
 
       dataKeys,
-      updateProfile
+      handleUserInfo
     }
   }
 }
@@ -133,10 +107,12 @@ export default {
       .card_row {
         display: flex;
         column-gap: 12px;
+
         .row_pic {
           width: 40%;
           flex-shrink: 0;
-        } 
+        }
+
         .row_info {
           flex-grow: 1;
         }

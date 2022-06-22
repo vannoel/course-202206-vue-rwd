@@ -4,7 +4,7 @@
       <label>帳號</label>
       <input v-model="formState.username" placeholder="請輸入帳號"/>
       <label>帳號</label>
-      <input v-model="formState.password" placeholder="請輸入密碼"/>
+      <input type="password" v-model="formState.password" placeholder="請輸入密碼"/>
 
       <button @click="handleSubmit">登入</button>
     </a-card>
