@@ -9,29 +9,6 @@
             </router-link>
           </a-menuItem>
         </div>
-        <!-- <template v-if="layer1.children">
-          <a-sub-menu popupClassName="module-menu-popup" :popupOffset="[0, 0]" :key="layer1.routeName">
-            <template #title>
-              <div>
-                {{ layer1.label }}
-              </div>
-            </template>
-            <template v-for="layer2 in layer1.children" :key="layer2.routeName">
-              <a-menuItem>
-                <router-link class="menu_button" :to="{ name: layer2.routeName }">
-                  {{ layer2.label }}
-                </router-link>
-              </a-menuItem>
-            </template>
-          </a-sub-menu>
-        </template>
-        <template v-else>
-          <a-menuItem :key="layer1.routeName">
-            <router-link class="menu_button" :to="{ name: layer1.routeName }">
-              {{ layer1.label }}
-            </router-link>
-          </a-menuItem>
-        </template> -->
       </template>
     </a-menu>
   </div>
