@@ -10,11 +10,11 @@
       <a-form :model="formState" name="basic" :label-col="{ span: 8 }" autocomplete="off" @finish="onFinish">
 
         <a-form-item label="學號" name="id" >
-          <a-input :value="formState.id" readonly/>
+          <a-input :value="formState.id" disabled/>
         </a-form-item>
 
         <a-form-item label="課程代碼" name="classroomId" :rules="[{ required: true, message: '請輸入課程代碼' }]">
-          <a-input v-model:value="formState.classroomId" />
+          <a-input v-model:value="formState.classroomId" :disabled="route.params.id !== 'new'"/>
         </a-form-item>
 
         <a-form-item label="假別" name="absenceType" :rules="[{ required: true, message: '請選取假別' }]">
@@ -26,11 +26,11 @@
         </a-form-item>
 
         <a-form-item label="起始時間" name="absenceBegin" :rules="[{ required: true, message: '請選取起始時間' }]">
-          <a-date-picker v-model:value="formState.absenceBegin" show-time :disabled-date="disabledBeginDate" />
+          <a-date-picker v-model:value="formState.absenceBegin" show-time :disabled-date="disabledBeginDate" :disabled="route.params.id !== 'new'"/>
         </a-form-item>
 
         <a-form-item label="迄止時間" name="absenceEnd" :rules="[{ required: true, message: '請選取迄止時間' }]">
-          <a-date-picker v-model:value="formState.absenceEnd" show-time :disabled-date="disabledEndDate" />
+          <a-date-picker v-model:value="formState.absenceEnd" show-time :disabled-date="disabledEndDate" :disabled="route.params.id !== 'new'"/>
         </a-form-item>
 
         <a-form-item label="備註" name="absenceNotation">
@@ -55,20 +55,20 @@
 <script>
 import { reactive, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { notification } from 'ant-design-vue';
-// import dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 import { ROUTES } from '@/assets/definitions/routes';
 import { TYPE } from '@/assets/definitions/absence';
 
-// import { list } from '@/mock/absence';
+import { list } from '@/mock/absence';
 
 export default {
   name: 'AbsenceFormView',
   setup() {
     const store = useStore();
-    // const route = useRoute();
+    const route = useRoute();
     const router = useRouter();
 
     const user = computed(() => store.state.Auth.user);
@@ -96,6 +96,20 @@ export default {
     }
 
     onMounted(() => {
+      // if it is not new
+      if(route.params.id !== 'new') {
+        const result = list.find((item)=>{
+          return item.recordId === route.params.id
+        })
+        if(result) {
+          formState.classroomId = result.classroomId;
+          formState.absenceType = result.absenceType;
+          formState.absenceBegin = dayjs(result.absenceBegin * 1000);
+          formState.absenceEnd = dayjs(result.absenceEnd * 1000);
+          formState.absenceNotation = result.absenceNotation;
+        }
+      }
+
       store.commit('updateLoadingStatus', false);
     })
 
@@ -103,6 +117,7 @@ export default {
       ROUTES,
       TYPE,
 
+      route,
       formState,
 
       onFinish,
