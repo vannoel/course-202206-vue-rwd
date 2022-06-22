@@ -1,6 +1,4 @@
 import { defineConfig } from 'vite'
-import Components from 'unplugin-vue-components/vite'
-import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import vue from '@vitejs/plugin-vue'
 
 import sassAbstractsImports from './utils/sassAbstractsImports';
@@ -12,10 +10,6 @@ const path = require('path');
 export default defineConfig({
   plugins: [
     vue(),
-    Components({
-      resolvers: [AntDesignVueResolver()],
-      dts: true,
-    }),
   ],
   resolve: {
     alias: {
