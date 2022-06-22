@@ -27,8 +27,9 @@
 </template>
 
 <script>
-import { ref, provide } from "vue";
+import { ref, provide, watch } from "vue";
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 import { LogoutOutlined, MenuOutlined } from '@ant-design/icons-vue';
 
 export default {
@@ -39,7 +40,8 @@ export default {
   },
   setup() {
     const store = useStore();
-    const sidebarCollapsedStatus = ref(false); // true: opened, false: closed
+    const route = useRoute();
+    const sidebarCollapsedStatus = ref(false); // true: closed, false: opened
 
     const handleUpdateSidebarCollapsedStatus = (value) => {
       sidebarCollapsedStatus.value = value;
@@ -54,6 +56,13 @@ export default {
 
     provide("sidebarCollapsedStatus", sidebarCollapsedStatus);
     provide("updateSidebarCollapsedStatus", handleUpdateSidebarCollapsedStatus);
+
+    watch(
+      ()=>route.path,
+      ()=>{
+        handleUpdateSidebarCollapsedStatus(true)
+      }
+    )
     return {
       sidebarCollapsedStatus,
 
