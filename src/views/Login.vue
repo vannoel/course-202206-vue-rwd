@@ -43,8 +43,8 @@ export default {
 
     const onFinish = (values) => {
       if (
-        values.username === process.env.VUE_APP_USERNAME
-        && values.password === process.env.VUE_APP_PASSWORD
+        values.username === import.meta.env.VITE_USERNAME
+        && values.password === import.meta.env.VITE_PASSWORD
       ) {
         store.dispatch('Auth/login', profile);
         router.push({ name: ROUTES.HOME });
@@ -61,21 +61,21 @@ export default {
       store.commit('updateLoadingStatus', false);
     })
 
-    // const handleSubmit = (event)=>{
-    //   event.preventDefault();
-    //   if (
-    //     formState.username === process.env.VUE_APP_USERNAME
-    //     && formState.password === process.env.VUE_APP_PASSWORD
-    //   ) {
-    //     store.dispatch('Auth/login', profile);
-    //   } else {
-    //     notification['error']({
-    //       message: '登入失敗',
-    //       description:
-    //         '請確認帳號與密碼是否輸入正確',
-    //     });
-    //   }
-    // }
+    const handleSubmit = (event)=>{
+      event.preventDefault();
+      if (
+        formState.username === import.meta.env.VITE_USERNAME
+        && formState.password === import.meta.env.VITE_PASSWORD
+      ) {
+        store.dispatch('Auth/login', profile);
+      } else {
+        notification['error']({
+          message: '登入失敗',
+          description:
+            '請確認帳號與密碼是否輸入正確',
+        });
+      }
+    }
 
     return {
       store,
