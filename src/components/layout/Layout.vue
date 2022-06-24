@@ -13,10 +13,11 @@
       </a-button>
     </a-layout-header>
     <a-layout class="layout_body">
-      <a-layout-sider :collapsed="sidebarCollapsedStatus" collapsible :trigger="null" :width="200" :collapsedWidth="0" :class="[
-        'body_side scrollable-y',
-        { 'side-hide': sidebarCollapsedStatus },
-      ]">
+      <a-layout-sider :collapsed="sidebarCollapsedStatus" collapsible :trigger="null" :width="200" :collapsedWidth="0"
+        :class="[
+          'body_side scrollable-y',
+          { 'side-hide': sidebarCollapsedStatus },
+        ]">
         <module-menu />
       </a-layout-sider>
       <a-layout-content class="body_content">
@@ -58,9 +59,11 @@ export default {
     provide("updateSidebarCollapsedStatus", handleUpdateSidebarCollapsedStatus);
 
     watch(
-      ()=>route.path,
-      ()=>{
-        handleUpdateSidebarCollapsedStatus(true)
+      () => route.path,
+      () => {
+        if (window.innerWidth < 768) {
+          handleUpdateSidebarCollapsedStatus(true)
+        }
       }
     )
     return {
@@ -101,6 +104,11 @@ export default {
       height: inherit;
       background: #fafafa;
       border-right: 1px solid #f0f0f0;
+
+      @media (max-width: 768px) {
+        position: fixed;
+        z-index: 1;
+      }
     }
 
     .body_content {
