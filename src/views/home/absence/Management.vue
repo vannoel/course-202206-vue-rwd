@@ -6,7 +6,7 @@
     </a-breadcrumb>
 
     <a-card class="page_card">
-      <router-link :to="{ name: ROUTES.ABSENCE_FORM, params: { id: 'new' }  }">
+      <router-link :to="{ name: ROUTES.ABSENCE_FORM, params: { id: 'new' } }">
         <a-button class="card_button">
           填寫假單
         </a-button>
@@ -15,7 +15,7 @@
         <template #bodyCell="{ text, record, column }">
           <template v-if="column.dataIndex === 'recordId'">
             <div class="table_header header-recordId">
-              <router-link :to="{ name: ROUTES.ABSENCE_FORM, params: { id: text }  }">
+              <router-link :to="{ name: ROUTES.ABSENCE_FORM, params: { id: text } }">
                 <a-button type="text" class="table_link">
                   {{ text }}
                 </a-button>
@@ -30,7 +30,7 @@
           </template>
           <template v-else-if="column.dataIndex === 'applyAt'">
             <div class="table_header header-applyAt">
-              {{ text? formatTime(text): '' }}
+              {{ text ? formatTime(text) : '' }}
             </div>
           </template>
           <template v-else>
@@ -41,6 +41,24 @@
         </template>
       </a-table>
     </a-card>
+
+    <div class="page_list">
+      <router-link :to="{ name: ROUTES.ABSENCE_FORM, params: { id: 'new' } }">
+        <a-button class="card_button">
+          填寫假單
+        </a-button>
+      </router-link>
+      <template v-for="record of list" :key="record.recordId">
+        <a-card class="page_mobileCard">
+          <a-row :gutter="[12, 12]">
+            <template v-for="column of columns" :key="column.key">
+              <a-col :span="12">{{ column.title }}</a-col>
+              <a-col :span="12">{{ record[column.key] }}</a-col>
+            </template>
+          </a-row>
+        </a-card>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -112,6 +130,7 @@ export default {
     })
     return {
       ROUTES,
+      list,
       columns,
       absenceFormList,
 
@@ -136,6 +155,7 @@ export default {
       .card_button {
         margin-bottom: 12px;
       }
+
       .card_table {
         .table_link {
           &:hover {
@@ -143,6 +163,32 @@ export default {
           }
         }
       }
+    }
+  }
+
+  .page_list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+
+    .card_button {
+      margin-top: 12px;
+    }
+
+    .ant-card {
+      box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .page_card {
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .page_list {
+    @media (min-width: 768px) {
+      display: none;
     }
   }
 }

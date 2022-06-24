@@ -37,7 +37,7 @@
           <a-textarea v-model:value="formState.absenceNotation" :rows="4" />
         </a-form-item>
 
-        <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
+        <a-form-item>
           <div class="card_buttonGroup">
             <router-link :to="{ name: ROUTES.ABSENCE_MANAGEMENT }">
               <a-button type="text" class="card_button">
@@ -135,6 +135,12 @@ export default {
 
     .page_card {
       margin-top: 12px;
+
+      .ant-picker {
+        @media (max-width: 768px) {
+          width: 100%;
+        }
+      }
 
       .ant-card-body {
         padding: 12px;

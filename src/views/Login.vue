@@ -6,7 +6,7 @@
           <a-input v-model:value="formState.username" placeholder="請輸入帳號" />
         </a-form-item>
         <a-form-item label="密碼" name="password">
-          <a-input v-model:value="formState.password" placeholder="請輸入密碼" />
+          <a-input v-model:value="formState.password" type="password" placeholder="請輸入密碼" />
         </a-form-item>
       </a-form>
 
